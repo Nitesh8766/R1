@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Static Analysis Report - demo.exe</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#0d1117; color:#c9d1d9; padding:2rem; max-width:900px; margin:auto; }
+  h1,h2,h3 { color:#f0f6fc; }
+  .badge { display:inline-block; padding:2px 10px; border-radius:4px; background:#21262d; color:#8b949e; font-size:0.75rem; border:1px solid #30363d; }
+  .verdict { font-size:2rem; font-weight:bold; color:#ff4d4f; }
+  table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  th, td { border:1px solid #30363d; padding:6px 10px; text-align:left; font-size:0.85rem; vertical-align:top; }
+  th { background:#161b22; }
+  .sev { padding:2px 8px; border-radius:4px; color:#111; font-weight:bold; font-size:0.7rem; }
+  .muted { color:#8b949e; font-size:0.8rem; }
+  .disclaimer { border:1px solid #30363d; background:#161b22; padding:1rem; border-radius:6px; margin-top:2rem; }
+  code { background:#161b22; padding:1px 4px; border-radius:3px; }
+</style>
+</head>
+<body>
+  <span class="badge">STATIC ANALYSIS ONLY</span>
+  <h1>🛡 Malware Static Analysis Report</h1>
+  <p class="muted">Generated 2026-09-01 09:35:38 UTC</p>
+
+  <h2>1. File Information</h2>
+  <table>
+    <tr><th>Name</th><td>demo.exe</td></tr>
+    <tr><th>Size</th><td>6144 bytes</td></tr>
+    <tr><th>SHA-256</th><td><code>003f7534644ff7c5f0e1a1666b3b91c085a50496ea3b53c05bbf8c9781c8e16f</code></td></tr>
+    <tr><th>Is PE</th><td>True</td></tr>
+  </table>
+
+  <h2>2. Risk Assessment</h2>
+  <p class="verdict">HIGH RISK</p>
+  <p>Raw score: 102 &nbsp;|&nbsp; Normalized: 100/100 &nbsp;|&nbsp; 16 indicator(s)</p>
+  <p class="muted">This is a heuristic classification based on detected static indicators, not a definitive malware determination.</p>
+
+  <h2>3. PE Information</h2>
+  <table>
+    <tr><th>is_pe</th><td>True</td></tr><tr><th>machine</th><td>0x14c</td></tr><tr><th>subsystem</th><td>3</td></tr><tr><th>sections</th><td>4</td></tr><tr><th>entry_point</th><td>0x1000</td></tr><tr><th>image_base</th><td>0x400000</td></tr><tr><th>timestamp</th><td>1600000000</td></tr><tr><th>is_signed</th><td>False</td></tr><tr><th>has_tls_callbacks</th><td>False</td></tr><tr><th>num_imports</th><td>5</td></tr>
+  </table>
+
+  <h2>4. Section Analysis</h2>
+  <table>
+    <tr><th>Section</th><th>Raw Size</th><th>Entropy</th><th>Permissions</th><th>Status</th></tr>
+    <tr>
+            <td>.text</td><td>512</td>
+            <td>0.06</td><td>RWX</td>
+            <td>Suspicious</td>
+        </tr>
+<tr>
+            <td>UPX1</td><td>4096</td>
+            <td>7.95</td><td>RW-</td>
+            <td>Suspicious</td>
+        </tr>
+<tr>
+            <td>.idata</td><td>512</td>
+            <td>2.23</td><td>RW-</td>
+            <td>Normal</td>
+        </tr>
+<tr>
+            <td>.rdata</td><td>512</td>
+            <td>3.28</td><td>R--</td>
+            <td>Normal</td>
+        </tr>
+  </table>
+
+  <h2>5. Import Analysis</h2>
+  <p>Total imports: 5 &nbsp;|&nbsp; Suspicious imports: 5</p>
+
+  <h2>6. Detection Category Breakdown</h2>
+  <table>
+    <tr><th>Category</th><th>Score Contribution</th></tr>
+    <tr><td>Process Injection</td><td>26</td></tr>
+<tr><td>Ransomware Indicators</td><td>20</td></tr>
+<tr><td>Packing / Obfuscation</td><td>15</td></tr>
+<tr><td>Persistence</td><td>10</td></tr>
+<tr><td>PE Structural Anomaly</td><td>8</td></tr>
+<tr><td>Network Download</td><td>7</td></tr>
+<tr><td>String-Based Indicator</td><td>7</td></tr>
+<tr><td>Anti-Debug</td><td>5</td></tr>
+<tr><td>Code Signing</td><td>2</td></tr>
+<tr><td>Network Activity</td><td>2</td></tr>
+  </table>
+
+  <h2>7. Findings</h2>
+  <table>
+    <tr><th>Severity</th><th>Indicator</th><th>Category</th><th>Score</th><th>Description</th><th>Evidence</th></tr>
+    <tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>CreateRemoteThread</td>
+            <td>process_injection</td>
+            <td>+10</td>
+            <td>Imports suspicious API &#x27;CreateRemoteThread&#x27;<br><span class="muted">Creates a thread running in another process; a classic process-injection primitive.</span></td>
+            <td class="muted">Import: CreateRemoteThread (from KERNEL32.dll)</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>shadow_copy_deletion</td>
+            <td>ransomware</td>
+            <td>+10</td>
+            <td>Suspicious string pattern matched: shadow copy deletion<br><span class="muted">References vssadmin, used to delete Volume Shadow Copy backups -- a technique associated with inhibiting system recovery.</span></td>
+            <td class="muted">Matched text (truncated): vssadmin</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>ransom_note_language</td>
+            <td>ransomware</td>
+            <td>+10</td>
+            <td>Suspicious string pattern matched: ransom note language<br><span class="muted">Contains language typical of a ransom note.</span></td>
+            <td class="muted">Matched text (truncated): Your files have been encrypted</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>UPX1</td>
+            <td>packing</td>
+            <td>+9</td>
+            <td>Section &#x27;UPX1&#x27; has high entropy (7.95/8.0)<br><span class="muted">High entropy may indicate packing, compression, or encryption. It is not independently proof of malicious activity.</span></td>
+            <td class="muted">Section: UPX1, entropy: 7.95/8.0</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>.text</td>
+            <td>structural</td>
+            <td>+8</td>
+            <td>Section &#x27;.text&#x27; is both writable and executable<br><span class="muted">Writable+executable sections are unusual in normally compiled code and are frequently seen in packers or self-modifying/injection stubs.</span></td>
+            <td class="muted">Section: .text, characteristics: RWX</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>VirtualAllocEx</td>
+            <td>process_injection</td>
+            <td>+8</td>
+            <td>Imports suspicious API &#x27;VirtualAllocEx&#x27;<br><span class="muted">Allocates memory in a remote process&#x27;s address space; a standard first step in remote code/DLL injection.</span></td>
+            <td class="muted">Import: VirtualAllocEx (from KERNEL32.dll)</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ff4d4f">CRITICAL</span></td>
+            <td>WriteProcessMemory</td>
+            <td>process_injection</td>
+            <td>+8</td>
+            <td>Imports suspicious API &#x27;WriteProcessMemory&#x27;<br><span class="muted">Writes data into another process&#x27;s memory; commonly paired with VirtualAllocEx and CreateRemoteThread for injection.</span></td>
+            <td class="muted">Import: WriteProcessMemory (from KERNEL32.dll)</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffa940">HIGH</span></td>
+            <td>URLDownloadToFileA</td>
+            <td>network_download</td>
+            <td>+7</td>
+            <td>Imports suspicious API &#x27;URLDownloadToFileA&#x27;<br><span class="muted">Downloads a file from a URL directly to disk; a common second-stage payload dropper API.</span></td>
+            <td class="muted">Import: URLDownloadToFileA (from URLMON.dll)</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffa940">HIGH</span></td>
+            <td>run_key</td>
+            <td>persistence</td>
+            <td>+7</td>
+            <td>Suspicious string pattern matched: run key<br><span class="muted">References the Run registry key, a well-known auto-start persistence location.</span></td>
+            <td class="muted">Matched text (truncated): SOFTWARE\Microsoft\Windows\CurrentVersion\Run</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffa940">HIGH</span></td>
+            <td>UPX1</td>
+            <td>packing</td>
+            <td>+6</td>
+            <td>Section name &#x27;UPX1&#x27; matches a known packer signature<br><span class="muted">Certain section names (e.g. UPX0/UPX1) are strong conventions used by well-known packers, though names can also be forged.</span></td>
+            <td class="muted">Section name: UPX1</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffa940">HIGH</span></td>
+            <td>IsDebuggerPresent</td>
+            <td>anti_debug</td>
+            <td>+5</td>
+            <td>Imports suspicious API &#x27;IsDebuggerPresent&#x27;<br><span class="muted">Checks whether a debugger is attached; a common anti-analysis check.</span></td>
+            <td class="muted">Import: IsDebuggerPresent (from KERNEL32.dll)</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffd666">MEDIUM</span></td>
+            <td>powershell_reference</td>
+            <td>string_indicator</td>
+            <td>+4</td>
+            <td>Suspicious string pattern matched: powershell reference<br><span class="muted">References PowerShell, a scripting environment frequently used in living-off-the-land attacks.</span></td>
+            <td class="muted">Matched text (truncated): powershell</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffd666">MEDIUM</span></td>
+            <td>shell_reference</td>
+            <td>string_indicator</td>
+            <td>+3</td>
+            <td>Suspicious string pattern matched: shell reference<br><span class="muted">References cmd.exe, the Windows command interpreter.</span></td>
+            <td class="muted">Matched text (truncated): cmd.exe</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#ffd666">MEDIUM</span></td>
+            <td>appdata_persistence</td>
+            <td>persistence</td>
+            <td>+3</td>
+            <td>Suspicious string pattern matched: appdata persistence<br><span class="muted">References the Roaming AppData path, a common location for persistence/dropped payloads.</span></td>
+            <td class="muted">Matched text (truncated): AppData\Roaming</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#95de64">LOW</span></td>
+            <td>Authenticode</td>
+            <td>signing</td>
+            <td>+2</td>
+            <td>No Authenticode signature present<br><span class="muted">The file is not digitally signed. Many legitimate tools are unsigned too, so this is weak evidence on its own.</span></td>
+            <td class="muted">IMAGE_DIRECTORY_ENTRY_SECURITY is empty</td>
+        </tr>
+<tr>
+            <td><span class="sev" style="background:#95de64">LOW</span></td>
+            <td>url_present</td>
+            <td>network</td>
+            <td>+2</td>
+            <td>Suspicious string pattern matched: url present<br><span class="muted">Contains an embedded URL.</span></td>
+            <td class="muted">Matched text (truncated): http://</td>
+        </tr>
+  </table>
+
+  <h2>8. Indicators of Compromise (Static)</h2>
+  <h4>Urls</h4><ul><li>http://185.199.108.153/update.bin</li></ul>
+<h4>Ipv4</h4><ul><li>185.199.108.153</li></ul>
+<h4>Windows Paths</h4><ul><li>C:\Users\Public\AppData\Roaming\</li></ul>
+
+  <h2>9. MITRE ATT&CK Mapping</h2>
+  <table>
+    <tr><th>Technique ID</th><th>Technique</th></tr>
+    <tr><td>T1027</td><td>Obfuscated Files or Information</td></tr>
+<tr><td>T1055</td><td>Process Injection</td></tr>
+<tr><td>T1071</td><td>Application Layer Protocol</td></tr>
+<tr><td>T1105</td><td>Ingress Tool Transfer</td></tr>
+<tr><td>T1486</td><td>Data Encrypted for Impact</td></tr>
+<tr><td>T1490</td><td>Inhibit System Recovery</td></tr>
+<tr><td>T1543.003</td><td>Windows Service</td></tr>
+<tr><td>T1547.001</td><td>Registry Run Keys / Startup Folder</td></tr>
+<tr><td>T1622</td><td>Debugger Evasion</td></tr>
+  </table>
+
+  <div class="disclaimer">
+    <strong>Limitations and Disclaimer</strong>
+    <p>This tool performs static heuristic analysis only and does not execute, detonate,
+    or otherwise run the analyzed sample. A suspicious indicator is not proof that a file
+    is malicious -- legitimate software can use the same APIs, strings, and packing
+    techniques flagged here. Static analysis also cannot observe runtime-only or
+    obfuscated behavior. Findings should be corroborated with dynamic/sandbox analysis
+    and multi-engine AV scanning before any containment decision is made.</p>
+  </div>
+</body>
+</html>

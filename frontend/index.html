@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malware Static Analysis Workbench</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <h1>🛡 Malware Static Analysis Workbench</h1>
+    <span class="badge badge-static">STATIC ANALYSIS ONLY</span>
+  </div>
+  <p class="tagline">This tool performs heuristic analysis and does not execute the analyzed sample. A suspicious indicator is not proof that a file is malicious.</p>
+</header>
+
+<main class="container">
+
+  <!-- Upload -->
+  <section class="card" id="upload-card">
+    <h2>Upload a Sample</h2>
+    <div id="dropzone" class="dropzone">
+      <p id="dropzone-text">Drag &amp; drop a file here, or click to browse</p>
+      <input type="file" id="file-input" hidden>
+    </div>
+    <div class="upload-actions">
+      <span id="selected-filename" class="muted"></span>
+      <div>
+        <button id="clear-btn" class="btn btn-ghost" disabled>Clear</button>
+        <button id="analyze-btn" class="btn btn-primary" disabled>Analyze</button>
+      </div>
+    </div>
+    <div id="status-line" class="status-line"></div>
+  </section>
+
+  <!-- Results -->
+  <div id="results" class="hidden">
+
+    <section class="grid-2">
+      <div class="card risk-card">
+        <h2>Risk Overview</h2>
+        <div class="risk-gauge-wrap">
+          <div id="risk-gauge" class="risk-gauge">
+            <span id="risk-score-num">0</span>
+          </div>
+          <div class="risk-summary">
+            <div id="verdict-label" class="verdict-label">-</div>
+            <div id="finding-count" class="muted"></div>
+            <div id="category-count" class="muted"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>File Information</h2>
+        <table class="kv-table" id="file-info-table"></table>
+        <button id="copy-hash-btn" class="btn btn-ghost btn-small">Copy SHA-256</button>
+        <button id="report-btn" class="btn btn-ghost btn-small">Generate HTML Report</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Detection Category Breakdown</h2>
+      <div id="category-bars" class="bar-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Findings</h2>
+      <div class="findings-toolbar">
+        <input type="text" id="findings-search" placeholder="Search findings...">
+        <select id="findings-category-filter"><option value="">All categories</option></select>
+        <select id="findings-severity-filter">
+          <option value="">All severities</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select id="findings-sort">
+          <option value="score_desc">Sort: score (high→low)</option>
+          <option value="score_asc">Sort: score (low→high)</option>
+        </select>
+      </div>
+      <div id="findings-list" class="findings-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>PE Analysis</h2>
+      <table class="kv-table" id="pe-info-table"></table>
+      <h3>Sections</h3>
+      <table class="data-table" id="section-table">
+        <thead><tr><th>Section</th><th>Raw Size</th><th>Entropy</th><th>Permissions</th><th>Status</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Entropy Visualization</h2>
+      <div id="entropy-bars" class="bar-list"></div>
+      <p class="muted small">High entropy may indicate packing, compression, or encryption. It is not independently proof of malicious activity.</p>
+    </section>
+
+    <section class="card">
+      <h2>Import Analysis</h2>
+      <p id="import-summary" class="muted"></p>
+      <div id="import-groups"></div>
+    </section>
+
+    <section class="card">
+      <h2>String Analysis</h2>
+      <p id="string-summary" class="muted"></p>
+      <input type="text" id="string-search" placeholder="Search extracted strings...">
+      <div id="string-list" class="string-list"></div>
+      <div class="pagination">
+        <button id="string-prev" class="btn btn-ghost btn-small">Prev</button>
+        <span id="string-page-label" class="muted"></span>
+        <button id="string-next" class="btn btn-ghost btn-small">Next</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Indicators of Compromise (Static)</h2>
+      <div id="ioc-panel"></div>
+    </section>
+
+    <section class="card">
+      <h2>MITRE ATT&amp;CK Mapping</h2>
+      <table class="data-table" id="mitre-table">
+        <thead><tr><th>Technique</th><th>Name</th><th>Based on</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="muted small">Only mappings directly supported by a detected static indicator are shown. Presence of an indicator does not confirm the technique was actually executed.</p>
+    </section>
+
+  </div>
+
+  <!-- History -->
+  <section class="card">
+    <h2>Recent Analyses</h2>
+    <table class="data-table" id="history-table">
+      <thead><tr><th>File</th><th>Timestamp</th><th>Score</th><th>Verdict</th><th>Findings</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Malware Static Analysis Workbench &mdash; college mini-project. Static analysis only; no sample is ever executed, detonated, or contacted over the network by this tool.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
